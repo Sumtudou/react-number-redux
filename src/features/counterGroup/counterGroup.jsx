@@ -1,26 +1,26 @@
 import React from 'react';
 //import Counter from '../counter';
-import { Counter } from '../counter/Counter';
+import Counter  from '../Counter';
+import { connect } from 'react-redux';
 
 class CounterGroup extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = { size: 0, totalValue: 0 ,clearValue : 0};
+       
+        console.log(this.props);
+        this.state = { size: 0, clearValue: 0 };
     }
 
     handleResize = (event) => {
         let reSizes = event.target.value;
-        if(reSizes != this.state.size){
+        if (reSizes !== this.state.size) {
             this.setState({
                 size: reSizes ? parseInt(reSizes) : 0,
-                totalValue: 0,
-                clearValue : 1
+                clearValue: 1
             })
         }
-
     }
-
 
 
     render() {
@@ -29,24 +29,33 @@ class CounterGroup extends React.Component {
             <div>
                 <label>Group Size:</label>
                 <input onBlur={this.handleResize} defaultValue={0} /><br />
-                <label>totalValue: {this.state.totalValue}</label>
+                <label>totalValue: {this.props.sum}</label>
             </div>
             {
-                initArr.map(key => <Counter key={key}  clearValue={this.state.clearValue} onIncrease={this.totalIncrease} onDecrease={this.totalDecrease} />)
+                initArr.map(key => <Counter key={key} clearValue={this.state.clearValue}  />)
             }
         </div>
     }
-    totalIncrease = () => {
-        this.setState((prevState) => ({
-            totalValue: prevState.totalValue + 1,
-            clearValue : 0
-        }));
-    }
-    totalDecrease = () => {
-        this.setState((prevState) => ({
-            totalValue: prevState.totalValue - 1,
-            clearValue : 0
-        }));
-    }
+
+    //onIncrease={this.totalIncrease} onDecrease={this.totalDecrease}
+
+    // totalIncrease = () => {
+    //     this.setState((prevState) => ({
+    //         clearValue: 0
+    //     }));
+    // }
+    // totalDecrease = () => {
+    //     this.setState((prevState) => {
+    //         return ({
+    //             clearValue: 0
+    //         });
+    //     });
+    // }
 }
-export default CounterGroup;
+
+const mapStateToProps = state => {
+    console.log("ccc"+state);
+
+    return { sum: state,a:1 }
+}
+export default connect(mapStateToProps)(CounterGroup);
